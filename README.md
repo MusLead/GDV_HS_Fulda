@@ -1,4 +1,4 @@
-# Part 1 (Übung)
+# Graphische Datenverarbeitung
 
-The task is based on 
-https://cg-docs.netlify.app/generated/part1.html
+Name: Agha Muhammad Aslam
+Matrikelnr.: 1515659
