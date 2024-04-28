@@ -1,24 +1,68 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GDV</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- <script type="module" src="/src/cg/Part_1/main.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/pgIntro.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/prespectiveDivide.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/rayEquation.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/vector.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/walkToVec.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Part_1/basis.ts"></script> -->
+    <style>
+      .container {
+        flex-grow: 1; 
+        display: flex;
+      }
 
-    <!-- <script type="module" src="/src/cg/Linear_Algebra/angle.ts"></script> -->
-    <!-- <script type="module" src="/src/cg/Linear_Algebra/matrixTransformation.ts"></script> -->
-    <script type="module" src="/src/cg/Linear_Algebra/rotateMatrix.ts"></script>
+      nav ul li a:hover {
+        color: red;
+      }
 
-  </body>
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      #menu {
+        background-color: #dddddd;
+        width: 200px;
+        padding: 20px;
+        padding-top: 50px;
+        flex-grow: 1;
+      }
+
+      #app {
+        flex-grow: 2;
+        padding: 20px;
+      }
+
+      .menuItem {
+        margin-bottom: 10px; /* Adds space between each menu item */
+      }
+
+      .menuItem:last-child {
+        margin-bottom: 0; /* Removes margin from the last item */
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <nav id="menu"> 
+        <ul>
+          <li class="menuItem"><a href="?script=main">Main Page</a></li>
+          <li class="menuItem"><a href="?script=Part_1/pgIntro">Intro</a></li>
+          <li class="menuItem"><a href="?script=Part_1/perspectiveDivide">Perspective Divide</a></li>
+          <li class="menuItem"><a href="?script=Part_1/rayEquation">Ray Equation</a></li>
+          <li class="menuItem"><a href="?script=Part_1/vector">Vector</a></li>
+          <li class="menuItem"><a href="?script=Part_1/walkToVec">Walk To Vec</a></li>
+          <li class="menuItem"><a href="?script=Part_1/basis">Basis</a></li>
+          <li class="menuItem"><a href="?script=Linear_Algebra/angle">Angle</a></li>
+          <li class="menuItem"><a href="?script=Linear_Algebra/matrixTransformation">Matrix Transformation</a></li>
+          <li class="menuItem"><a href="?script=Linear_Algebra/rotateMatrix">Rotate Matrix</a></li>
+        </ul>
+      </nav>
+      <div id="app">
+        <!-- DO NOT CHANGE THE ID! THIS IS THE ROOT ELEMENT FOR VITE TO MOUNT THE APP -->
+    </div>
+    </div>
+    <script type="module" src="menuScript.ts"></script>
+</body>
 </html>
