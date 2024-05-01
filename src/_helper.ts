@@ -1,3 +1,18 @@
+export type Vec3 = [number, number, number];
+export type Vec4 = [number, number, number, number];
+
+export type Matrix3 = [
+    number, number, number,
+    number, number, number,
+    number, number, number
+]
+
+export type Matrix4 = [
+    number, number, number, number,
+    number, number, number, number,
+    number, number, number, number,
+    number, number, number, number
+];
 
 /**
  * (Aufgabe Part_1)
@@ -10,8 +25,9 @@ export function perspDivide(p: Array<number>, dist: number): Array<number> {
 }
 
 /**
- * (Aufgabe Part_1)
- * @param p 
+ * 
+ * @param v point of the ray
+ * @param o origin point
  * @param dist 
  * @returns 
  */
@@ -145,4 +161,76 @@ export function rotZ(angle: number){
         -Math.sin(rad), Math.cos(rad), 0,
         0,                  0,        1
     ];  
+}
+
+ 
+// Revision: swap second row, so that the answer might be correct?
+/**
+ * Function to apply a shear transformation to a 3Dpoint
+ * @param point a point x,y,z
+ * @param shearMatrix shear matrix 1D array with length 9
+ * @returns a shared x,y,z point
+ */
+//FIXME: The shear matrix is not correct, compare with multVecMatrix!
+export function shearPoint(point: number[], shearMatrix: number[]): number[] {
+    return [
+        shearMatrix[0] * point[0] + shearMatrix[1] * point[1] + shearMatrix[2] * point[2],
+        shearMatrix[6] * point[0] + shearMatrix[7] * point[1] + shearMatrix[8] * point[2],
+        shearMatrix[3] * point[0] + shearMatrix[4] * point[1] + shearMatrix[5] * point[2]
+    ];
+}
+
+/**
+ * Homogenous coordinates (Aufgabe Linear_Algebra 2)
+ * @param v 
+ * @param m 
+ * @returns 
+ */
+export function multVec3Matrix4(v: Vec3, m: Matrix4):Vec3 {
+    const v4 = [v[0], v[1], v[2], 1];
+    return [
+        v4[0] * m[0] + v4[1] * m[1] + v4[2] * m[2] + v4[3] * m[3],
+        v4[0] * m[4] + v4[1] * m[5] + v4[2] * m[6] + v4[3] * m[7],
+        v4[0] * m[8] + v4[1] * m[9] + v4[2] * m[10] + v4[3] * m[11]
+    ];
+}
+
+
+/**
+ * Multiply a vector with a 4x4 matrix (Aufgabe Linear_Algebra 2)
+ * @param a 
+ * @param b 
+ * @returns 
+ */
+export function matrix4Product(a: Matrix4, b: Matrix4):Matrix4 {
+    return [
+        a[0]*b[0] + a[1]*b[4] + a[2]*b[8] + a[3]*b[12],
+        a[0]*b[1] + a[1]*b[5] + a[2]*b[9] + a[3]*b[13],
+        a[0]*b[2] + a[1]*b[6] + a[2]*b[10] + a[3]*b[14],
+        a[0]*b[3] + a[1]*b[7] + a[2]*b[11] + a[3]*b[15],
+        
+        a[4]*b[0] + a[5]*b[4] + a[6]*b[8] + a[7]*b[12],
+        a[4]*b[1] + a[5]*b[5] + a[6]*b[9] + a[7]*b[13],
+        a[4]*b[2] + a[5]*b[6] + a[6]*b[10] + a[7]*b[14],
+        a[4]*b[3] + a[5]*b[7] + a[6]*b[11] + a[7]*b[15],
+        
+        a[8]*b[0] + a[9]*b[4] + a[10]*b[8] + a[11]*b[12],
+        a[8]*b[1] + a[9]*b[5] + a[10]*b[9] + a[11]*b[13],
+        a[8]*b[2] + a[9]*b[6] + a[10]*b[10] + a[11]*b[14],
+        a[8]*b[3] + a[9]*b[7] + a[10]*b[11] + a[11]*b[15],
+        
+        a[12]*b[0] + a[13]*b[4] + a[14]*b[8] + a[15]*b[12],
+        a[12]*b[1] + a[13]*b[5] + a[14]*b[9] + a[15]*b[13],
+        a[12]*b[2] + a[13]*b[6] + a[14]*b[10] + a[15]*b[14],
+        a[12]*b[3] + a[13]*b[7] + a[14]*b[11] + a[15]*b[15]
+    ];
+}
+
+export function matrix3ToMatrix4(m: Matrix3): Matrix4 {
+    return [
+        m[0], m[1], m[2], 0,
+        m[3], m[4], m[5], 0,
+        m[6], m[7], m[8], 0,
+          0,    0,   0,   1
+    ];
 }
