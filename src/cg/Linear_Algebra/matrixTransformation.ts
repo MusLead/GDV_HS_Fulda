@@ -5,7 +5,7 @@ const pg = new Playground();
 
 pg.gridXZ();
 
-const vec1 = [.5, .2, 2.3];
+const vec1 = [.5, .2, .3];
 const matrixA = [
     1, 2, 3,
     .4, .5, .6,
@@ -26,7 +26,7 @@ const vec1MatrixA = multVecMatrix(vec1, matrixA);
 const vec1MatrixAB = multVecMatrix(vec1MatrixA, matrixB);
 const vec1MatrixABC_1 = multVecMatrix(vec1MatrixAB, matrixC).map((v) => parseFloat(v.toFixed(2)));
 
-pg.visVector(vec1, { color: "blue", label: "V1", showCone: false, showArrow: true});
+pg.visVector(vec1, { color: "blue", label: "V1"});
 pg.visVector(vec1MatrixABC_1, { color: "green", label: "(((V1 * A) * B) * C)" });
 
 const mulMatrixAB = matrixProduct(matrixA, matrixB);
@@ -34,7 +34,7 @@ const mulMatrixABC = matrixProduct(mulMatrixAB, matrixC);
 const vec1MatrixABC_2 = multVecMatrix(vec1, mulMatrixABC).map((v) => parseFloat(v.toFixed(2)));
 
 
-pg.visVector(vec1MatrixABC_2, { color: "red", label: "V1 * ((A * B) * C)" });
+pg.visVector(vec1MatrixABC_2, { color: "red", labelCenter: "V1 * ((A * B) * C)" });
 const isSameResult = vec1MatrixABC_1.every((v, i) => v === vec1MatrixABC_2[i]);
 if(isSameResult){
     console.log("Both results are the same");

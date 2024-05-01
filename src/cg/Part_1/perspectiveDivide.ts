@@ -10,7 +10,7 @@ const distImagePlane = -1;
 // Creates a basic camera visualization
 pg.visCamera(distImagePlane);
 
-pg.visVector(point, { color: "pink", label: "P", triangles: true })
+pg.visVector(point, { color: "purple", label: "P", triangles: true })
 
 // DONE:16.04.2024
 // Add your function "perspDivide".

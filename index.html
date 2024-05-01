@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GDV</title>
     <style>
+      #header {
+        text-align: center;
+      }
+
       .container {
         flex-grow: 1; 
         display: flex;
@@ -41,9 +45,20 @@
       .menuItem:last-child {
         margin-bottom: 0; /* Removes margin from the last item */
       }
+
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
     </style>
 </head>
 <body>
+  <header id="header">
+    <h1>GDV</h1>
+  </header>
     <div class="container">
       <nav id="menu"> 
         <ul>

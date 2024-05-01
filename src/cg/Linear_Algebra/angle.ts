@@ -5,12 +5,15 @@ const pg = new Playground();
 
 pg.gridXZ();
 
-const vec1 = [5, .2, 2.3];
-const vec2 = [0, .3, 2.6];
+const vec1 = [1, .2, 1.3];
+const vec2 = [0, .3, 1.6];
 
-//FIXME: THE GREY LINE IS NOT SHOWING UP THAT SHOWS THE AREA OF 2 CROSSPRODUCT
-pg.visVector(vec1, { color: "blue", label: "V1", showCone: false, showArrow: true});
-pg.visVector(vec2, { color: "green", label: "V2", showCone: false, showArrow: true});
+//SOLVED: THE GREY LINE IS NOT SHOWING UP THAT SHOWS THE AREA OF 2 CROSSPRODUCT, below is this the solution.
+pg.visVector(vec1, { color: "blue", label: "V1", showCone: true, showArrow: true});
+pg.visVector(vec2, { color: "green", label: "V2", showCone: true, showArrow: true});
+//SOLUTION 30.04.2024: create a grey line that shows the area of the 2 crossproduct
+pg.visVector(vec1, { color: "grey", showArrow: true, showCone: false, placeAt: vec2});
+pg.visVector(vec2, { color: "grey", showArrow: true, showCone: false, placeAt: vec1});
 
 const dotProduct = vecDotProduct(vec1, vec2);
 const length1 = vecLength(vec1);

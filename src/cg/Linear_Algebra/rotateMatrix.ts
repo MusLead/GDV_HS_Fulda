@@ -1,18 +1,20 @@
 import Playground from "../../playground.ts";
 import { rotX, rotY, rotZ, multVecMatrix } from '../../_helper.ts'
 
-//TODO:check if the rotation is correct!
+//TODO: check if the rotation is correct!
 
 const pg = new Playground();
 
 pg.gridXZ();
 
-const vec1 = [.5, .2, 2.3];
+const vec1 = [1, 0, 0];
+pg.unitCircleXY();
+pg.unitCircleXZ();
 
 const rotateMatrixX = rotX(45);
 const vec1RotX = multVecMatrix(vec1, rotateMatrixX);
 
-pg.visVector(vec1, { color: "blue", label: "V1", showCone: false, showArrow: true});
+pg.visVector(vec1, { color: "blue", label: "V1", showArrow: true});
 pg.visVector(vec1RotX, { color: "green", label: "V1 RotX" });
 
 const rotateMatrixY = rotY(45);
