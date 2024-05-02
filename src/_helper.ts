@@ -234,3 +234,7 @@ export function matrix3ToMatrix4(m: Matrix3): Matrix4 {
           0,    0,   0,   1
     ];
 }
+
+export function vecMultiplyScalar(scalar: number, v: Vec3): Vec3 {
+    return v.map(value => value * scalar) as Vec3;
+}
