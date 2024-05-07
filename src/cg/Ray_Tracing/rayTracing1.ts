@@ -15,25 +15,25 @@ pg.gridXZ()
 const o = [0, 0, 0]
 const co = o.map((val, i) => val - sphere.center[i])
 
-const step = 1 / 25
+const step = 1 / 3
 
 for (let yCoord = -1; yCoord <= 1; yCoord +=  step) {
 
     for (let xCoord = -1; xCoord <= 1; xCoord +=  step) {
 
         const v: Vec3 = [xCoord, yCoord, -1]
-        const ov = v.map((val, i) => val - o[i])
         
         const t = sphere.radius // TODO: is it correct? t is sphere radius?
-        const p = ov.map((val, i) => val * t + o[i])
+        const ov = v.map((val, i) => val - o[i])
+        const p = ov.map((val, i) => val * t + o[i]) //(v-o)*t+o
         const pc = p.map((val, i) => val - sphere.center[i])
         
         pg.visVector(ov)
 
-        const rQuadrat = vecDotProduct(pc, pc)
+        const rQuadrat = vecDotProduct(pc, pc) // is this wrong????
         const a = vecDotProduct(ov, ov)
         const b = vecDotProduct(co, ov) * 2
-        const c = vecDotProduct(co, co) - rQuadrat
+        const c = vecDotProduct(co, co) - Math.pow(sphere.radius, 2) // why it is squared like this? not rQuadrat?
 
         const discriminant = b * b - 4 * a * c
 
