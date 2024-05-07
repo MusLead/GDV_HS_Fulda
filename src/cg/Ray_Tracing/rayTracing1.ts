@@ -23,14 +23,10 @@ for (let yCoord = -1; yCoord <= 1; yCoord +=  step) {
 
         const v: Vec3 = [xCoord, yCoord, -1]
         
-        const t = sphere.radius // TODO: is it correct? t is sphere radius?
         const ov = v.map((val, i) => val - o[i])
-        const p = ov.map((val, i) => val * t + o[i]) //(v-o)*t+o
-        const pc = p.map((val, i) => val - sphere.center[i])
-        
+                
         pg.visVector(ov)
 
-        const rQuadrat = vecDotProduct(pc, pc) // is this wrong????
         const a = vecDotProduct(ov, ov)
         const b = vecDotProduct(co, ov) * 2
         const c = vecDotProduct(co, co) - Math.pow(sphere.radius, 2) // why it is squared like this? not rQuadrat?
