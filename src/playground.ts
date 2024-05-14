@@ -211,7 +211,7 @@ export default class Playground {
         if (asPoint) {
             const material = new THREE.MeshBasicMaterial({ color: params.color });
             const mesh = new THREE.InstancedMesh(this.sphereInstance, material, 1);
-            mesh.scale.set(params.pscale, params.pscale, params.pscale);
+            mesh.scale.set(params.pscale!, params.pscale!, params.pscale!);
             mesh.position.set(endPos.x, endPos.y, endPos.z)
             this.scene.add(mesh);
         }
@@ -219,8 +219,8 @@ export default class Playground {
         const centerPos = pVec.clone();
         centerPos.multiplyScalar(0.5).add(placeVec);
 
-        this.addLabel(endPos, params.label, params.color);
-        this.addLabel(centerPos, params.labelCenter, params.color);
+        this.addLabel(endPos, params.label, params.color!);
+        this.addLabel(centerPos, params.labelCenter, params.color!);
 
         if (params.triangles) {
             this.visTriangle(

@@ -15,7 +15,7 @@ pg.gridXZ()
 const o = [0, 0, 0]
 const co = o.map((val, i) => val - sphere.center[i])
 
-const step = 1 / 3
+const step = 1 / 50
 
 for (let yCoord = -1; yCoord <= 1; yCoord +=  step) {
 
@@ -24,7 +24,7 @@ for (let yCoord = -1; yCoord <= 1; yCoord +=  step) {
         const v: Vec3 = [xCoord, yCoord, -1]
         
         const ov = v.map((val, i) => val - o[i])
-                
+
         pg.visVector(ov)
 
         const a = vecDotProduct(ov, ov)

@@ -3,3 +3,8 @@
 Name: Agha Muhammad Aslam
 
 Matrikelnr.: 1515659
+ 
+### Run the application 
+```
+npm run dev
+```
