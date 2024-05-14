@@ -1,3 +1,5 @@
+import JSZip from 'jszip';
+
 export type Color3 = [number, number, number];
 
 export interface ICoord2D {
@@ -25,9 +27,9 @@ export default class Framebuffer {
 
         this.color = [0, 0, 0]
         const appEl = document.getElementById("app");
-        if (!appEl) {
-            console.warn("No app element found!")
-            return
+        if(!appEl) {
+            console.warn("No app element found!");
+            return;
         }
         appEl.style.display = "flex";
         appEl.style.height = "100vh";
@@ -106,35 +108,67 @@ export default class Framebuffer {
 
     update() {
         if (!this.ctx) return;
-        if (!this.buffer) return;
-        this.ctx.putImageData(this.buffer, 0, 0);
+
+        this.ctx.putImageData(this.buffer!, 0, 0);
     }
 
     save(name: string) {
         sessionStorage.setItem("render." + name, this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
-
     }
+
+    // download() {
+    //     for (var key in sessionStorage) {
+    //         if (key.indexOf("render.") === 0) {
+    //             sessionStorage.getItem(key)
+    //             console.info("Downloading", key)
+    //             this.saveLink.setAttribute('download', key + '.png');
+    //             this.saveLink.setAttribute('href', sessionStorage[key]);
+    //             this.saveLink.click();
+    //         }
+    //     }
+    // }
 
     download() {
+        const zip = new JSZip();
+        
         for (var key in sessionStorage) {
-            if (key.indexOf("render.") === 0) {
-                sessionStorage.getItem(key)
-                console.info("Downloading", key)
-                this.saveLink.setAttribute('download', key + '.png');
-                this.saveLink.setAttribute('href', sessionStorage[key]);
-                this.saveLink.click();
+            if (key.startsWith("render.")) {
+                const dataURL = sessionStorage.getItem(key);
+                if (dataURL) {
+                    const blob = this.dataURLtoBlob(dataURL);
+                    zip.file(key.replace('render.', '') + '.png', blob, {binary: true});
+                }
             }
         }
+
+        zip.generateAsync({type: "blob"}).then((content) => {
+            this.saveLink.href = URL.createObjectURL(content);
+            this.saveLink.setAttribute('download', 'renders.zip');
+            this.saveLink.click();
+            URL.revokeObjectURL(this.saveLink.href); // Clean up URL object after the download
+        });
     }
 
-     log(content: string) {
-         this.logField.innerText = content;
-     }
+    dataURLtoBlob(dataURL: string): Blob {
+        const byteString = atob(dataURL.split(',')[1]);
+        const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        return new Blob([ab], {type: mimeString});
+    }
+
+    log(content: string) {
+        this.logField.innerText = content;
+    }
 
     clear() {
-        if(!this.ctx) return;
-        this.ctx.reset();
-        this.buffer = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx!.reset();
+        this.buffer = this.ctx!.getImageData(0, 0, this.canvas.width, this.canvas.height);
         this.update();
     }
 }

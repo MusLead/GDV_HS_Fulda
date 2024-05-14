@@ -249,7 +249,7 @@ export function rasterToNDC(x: number, y: number, width: number, height: number)
 
 export function ndcToScreen(x: number, y: number): Vec3 {
     return [
-        2 * x - 1,
+        (2 * x - 1),
         1 - 2 * y,
         0
     ];

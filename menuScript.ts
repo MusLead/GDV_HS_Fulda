@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const lastPart = parts[parts.length - 1];
         // Format the last part to replace underscores and camel case with spaces and proper capitalization
         const displayName = lastPart.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/\b\w/g, l => l.toUpperCase());
-
         // Update header with the formatted display name
         if (header) {
             header.textContent = displayName;
