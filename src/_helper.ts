@@ -238,3 +238,27 @@ export function matrix3ToMatrix4(m: Matrix3): Matrix4 {
 export function vecMultiplyScalar(scalar: number, v: Vec3): Vec3 {
     return v.map(value => value * scalar) as Vec3;
 }
+
+export function rasterToNDC(x: number, y: number, width: number, height: number): Vec3 {
+    return [
+        (x + 0.5) / width,
+        (y + 0.5) / height,
+        0
+    ];
+}
+
+export function ndcToScreen(x: number, y: number): Vec3 {
+    return [
+        2 * x - 1,
+        1 - 2 * y,
+        0
+    ];
+}
+
+export function ndcToScreenVec(vector: Vec3): Vec3 {
+    return [
+        2 * vector[0] - 1,
+        1 - 2 * vector[1],
+        0
+    ];
+}
