@@ -130,7 +130,13 @@ export default class Framebuffer {
 
     download() {
         const zip = new JSZip();
+    
+        // Fetch the header text, trim any leading or trailing spaces, and use it to name the ZIP file
+        const headerElement = document.getElementById("header");
+        const headerText = headerElement ? headerElement.textContent!.trim() : "GDV";
         
+        
+        console.log("headerText", headerText);
         for (var key in sessionStorage) {
             if (key.startsWith("render.")) {
                 const dataURL = sessionStorage.getItem(key);
@@ -140,10 +146,10 @@ export default class Framebuffer {
                 }
             }
         }
-
+    
         zip.generateAsync({type: "blob"}).then((content) => {
             this.saveLink.href = URL.createObjectURL(content);
-            this.saveLink.setAttribute('download', 'renders.zip');
+            this.saveLink.setAttribute('download', headerText + '.zip');
             this.saveLink.click();
             URL.revokeObjectURL(this.saveLink.href); // Clean up URL object after the download
         });
