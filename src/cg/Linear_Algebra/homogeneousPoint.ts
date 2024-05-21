@@ -23,6 +23,6 @@ const m4prod = matrix4Product(m3to4, m4);
 const v: Vec3 = [1,2,3];
 const v4 = multVec3Matrix4(v, m4prod);
 
-pg.visVector(v, { color: "blue", label: "V" });
-pg.visVector(v4, { color: "green", label: "V4" });
+pg.visVector(v, { color: "blue", labelCenter: "V" });
+pg.visVector(v4, { color: "green", labelCenter: "V4" });
 

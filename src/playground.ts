@@ -14,6 +14,7 @@ interface IVecParams {
     showArrow?: boolean,
     showCone?: boolean
 }
+
 export default class Playground {
 
     private container
@@ -283,7 +284,7 @@ export default class Playground {
         textEl.className = 'label';
         textEl.style.position = 'absolute';
         textEl.style.backgroundColor = 'rgba(255,255,255,0.4)';
-        textEl.style.padding = ".1rem";
+        textEl.style.padding = "0.1rem";
         textEl.style.fontSize = "1.5rem";
         textEl.style.fontWeight = "300";
         textEl.style.whiteSpace = "nowrap";

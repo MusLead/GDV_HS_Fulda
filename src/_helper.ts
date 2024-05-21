@@ -1,4 +1,5 @@
 export type Vec3 = [number, number, number];
+
 export type Vec4 = [number, number, number, number];
 
 export type Matrix3 = [
@@ -132,7 +133,7 @@ export function rotX(angle: number){
         1,       0,             0,
         0, Math.cos(rad), Math.sin(rad),
         0, -Math.sin(rad), Math.cos(rad)
-    ];
+    ] as Matrix3;
 }
 
 /**
@@ -146,7 +147,7 @@ export function rotY(angle: number){
         Math.cos(rad), 0, -Math.sin(rad),
         0,             1,       0,
         Math.sin(rad), 0, Math.cos(rad)
-    ];
+    ] as Matrix3;
 }
 
 /**
@@ -160,7 +161,7 @@ export function rotZ(angle: number){
         Math.cos(rad), Math.sin(rad), 0,
         -Math.sin(rad), Math.cos(rad), 0,
         0,                  0,        1
-    ];  
+    ] as Matrix3;  
 }
 
  
@@ -261,4 +262,52 @@ export function ndcToScreenVec(vector: Vec3): Vec3 {
         1 - 2 * vector[1],
         0
     ];
+}
+
+export function rasterToScreen(x: number, y: number, width: number, height: number): Vec3 {
+    return ndcToScreenVec(rasterToNDC(x, y, width, height));
+}
+
+export function easeInOutBounce(x: number): number {
+    return x < 0.5
+      ? (1 - easeOutBounce(1 - 2 * x)) / 2
+      : (1 + easeOutBounce(2 * x - 1)) / 2;
+}
+
+export function easeOutBounce(x: number): number {
+    const n1 = 7.5625;
+    const d1 = 2.75;
+    
+    if (x < 1 / d1) {
+        return n1 * x * x;
+    } else if (x < 2 / d1) {
+        return n1 * (x -= 1.5 / d1) * x + 0.75;
+    } else if (x < 2.5 / d1) {
+        return n1 * (x -= 2.25 / d1) * x + 0.9375;
+    } else {
+        return n1 * (x -= 2.625 / d1) * x + 0.984375;
+    }
+}
+
+export interface ISphere {
+    center: Vec3;
+    radius: number;
+    color: number[];
+}
+
+export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, number] {
+    
+    const co = o.map((o_val, i) => o_val - sphere.center[i])
+    const ov = v.map((v_val, i) => v_val - o[i])
+    
+    const a = vecDotProduct(ov, ov)
+    const b = vecDotProduct(co, ov) * 2
+    const c = vecDotProduct(co, co) - Math.pow(sphere.radius, 2) 
+    
+    const discriminant = b * b - 4 * a * c
+    
+    const t1 = (-b + Math.sqrt(discriminant)) / (2 * a)
+    const t2 = (-b - Math.sqrt(discriminant)) / (2 * a)
+        
+    return [t1, t2]
 }
