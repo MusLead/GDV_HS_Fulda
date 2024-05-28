@@ -183,17 +183,39 @@ export function shearPoint(point: number[], shearMatrix: number[]): number[] {
 
 /**
  * Homogenous coordinates (Aufgabe Linear_Algebra 2)
+ * Matrix x Vector
  * @param v 
  * @param m 
  * @returns 
  */
-export function multVec3Matrix4(v: Vec3, m: Matrix4):Vec3 {
+export function multVec3Matrix4_transpose(v: Vec3, m: Matrix4):Vec4 {
     const v4 = [v[0], v[1], v[2], 1];
     return [
         v4[0] * m[0] + v4[1] * m[1] + v4[2] * m[2] + v4[3] * m[3],
         v4[0] * m[4] + v4[1] * m[5] + v4[2] * m[6] + v4[3] * m[7],
-        v4[0] * m[8] + v4[1] * m[9] + v4[2] * m[10] + v4[3] * m[11]
+        v4[0] * m[8] + v4[1] * m[9] + v4[2] * m[10] + v4[3] * m[11],
+        v4[0] * m[12] + v4[1] * m[13] + v4[2] * m[14] + v4[3] * m[15]
     ];
+}
+
+/**
+ * Homogenous coordinates (Aufgabe Linear_Algebra 2)
+ * Vector x Matrix
+ * @param v 
+ * @param m 
+ * @returns 
+ */
+export function multVec3Matrix4(v: Vec3, m: Matrix4): Vec4 {
+    const v4: Vec4 = [v[0], v[1], v[2], 1]
+
+    // For our use case, we could also just return a Vec3
+    return [
+        v4[0] * m[0] + v4[1] * m[4] + v4[2] * m[8] + v4[3] * m[12],
+        v4[0] * m[1] + v4[1] * m[5] + v4[2] * m[9] + v4[3] * m[13],
+        v4[0] * m[2] + v4[1] * m[6] + v4[2] * m[10] + v4[3] * m[14],
+        v4[0] * m[3] + v4[1] * m[7] + v4[2] * m[11] + v4[3] * m[15],
+
+    ]
 }
 
 
@@ -240,19 +262,19 @@ export function vecMultiplyScalar(scalar: number, v: Vec3): Vec3 {
     return v.map(value => value * scalar) as Vec3;
 }
 
-export function rasterToNDC(x: number, y: number, width: number, height: number): Vec3 {
+export function rasterToNDC(x: number, y: number, width: number, height: number, z: number): Vec3 {
     return [
         (x + 0.5) / width,
         (y + 0.5) / height,
-        0
+        z
     ];
 }
 
-export function ndcToScreen(x: number, y: number): Vec3 {
+export function ndcToScreen(x: number, y: number, z: number): Vec3 {
     return [
         (2 * x - 1),
         1 - 2 * y,
-        0
+        z
     ];
 }
 
@@ -260,12 +282,12 @@ export function ndcToScreenVec(vector: Vec3): Vec3 {
     return [
         2 * vector[0] - 1,
         1 - 2 * vector[1],
-        0
+        vector[2]
     ];
 }
 
-export function rasterToScreen(x: number, y: number, width: number, height: number): Vec3 {
-    return ndcToScreenVec(rasterToNDC(x, y, width, height));
+export function rasterToScreen(x: number, y: number, width: number, height: number, z: number): Vec3 {
+    return ndcToScreenVec(rasterToNDC(x, y, width, height, z));
 }
 
 export function easeInOutBounce(x: number): number {
@@ -295,6 +317,14 @@ export interface ISphere {
     color: number[];
 }
 
+
+/**
+ * 
+ * @param v 
+ * @param o 
+ * @param sphere 
+ * @returns 
+ */
 export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, number] {
     
     const co = o.map((o_val, i) => o_val - sphere.center[i])

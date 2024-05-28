@@ -1,5 +1,5 @@
 import Framebuffer, { Color3 } from "../../framebuffer";
-import {rotZ, Vec3, Matrix4, Matrix3, rasterToScreen, multVec3Matrix4_transpose, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
+import { multVec3Matrix4 , rotZ, Vec3, Matrix4, Matrix3, rasterToScreen, multVec3Matrix4_transpose, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
 
 const width = 600;
 const height = 600;
@@ -22,11 +22,11 @@ const camT: Matrix4 = [
     1, 0, 0, 0,
     0, 1, 0, 0,
     0, 0, 1, 6,
-    0, 0, 0, 1
+    0, 0, 6, 1
 ];
 
 // Rotation matrix around X-axis
-const camRx = matrix3ToMatrix4(rotX(0) as Matrix3); // 30 degrees rotation around X-axis
+const camRx = matrix3ToMatrix4(rotX(-25) as Matrix3); // 30 degrees rotation around X-axis
 
 // Initial Camera Transformation
 const camInitialTransform = matrix4Product(camT, camRx);
@@ -52,9 +52,9 @@ for (let i = 0; i <= 1; i += 0.02) {
             const v = rasterToScreen(x, y, width, height, imagePlaneDist);
 
             // Apply combined camera transformation
-            //TODO: try to analyse how to rotate correctly with this approach!
-            const vTransformed = multVec3Matrix4_transpose(v, combinedCameraTransform);
-            const oTransformed = multVec3Matrix4_transpose(o, combinedCameraTransform);
+            
+            const vTransformed = multVec3Matrix4(v, combinedCameraTransform);
+            const oTransformed = multVec3Matrix4(o, combinedCameraTransform);
             
             vTransformed.pop(); // Remove the homogeneous coordinate
             oTransformed.pop(); // Remove the homogeneous coordinate
