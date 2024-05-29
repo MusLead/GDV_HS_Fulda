@@ -1,34 +1,39 @@
-// menuScript.ts
 document.addEventListener('DOMContentLoaded', async () => {
     const header = document.querySelector('#header h3');
     const queryParams = new URLSearchParams(window.location.search);
     const scriptPath = queryParams.get('script') || "/src/cg/main";  // Default to 'main'
 
-    // console.log(`Loading script: ${scriptPath}`);
     updateHeader(scriptPath);
-    loadScript(scriptPath);
+    await loadScript(scriptPath);
     await generateMenu();
 
     // Function to format and update the header based on the script name
     function updateHeader(scriptName: string) {
-        // Extract the last part of the script path
         const parts = scriptName.split('/');
         const lastPart = parts[parts.length - 1];
-        // Format the last part to replace underscores and camel case with spaces and proper capitalization
         const displayName = lastPart.replace(/_/g, ' ')
-                                .replace(/([a-z])([A-Z])/g, '$1 $2')
-                                .replace(/\b\w/g, l => l.toUpperCase());
-        // Update header with the formatted display name
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            .replace(/\b\w/g, l => l.toUpperCase());
+
         if (header) {
             header.textContent = displayName;
         }
     }
 
-    function loadScript(path: string) {
-        const script = document.createElement('script');
-        script.src = path + '.ts';
-        script.type = 'module';
-        document.body.appendChild(script);
+    async function loadScript(path: string) {
+        return new Promise<void>((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = path + '.ts';
+            script.type = 'module';
+
+            script.onload = () => resolve();
+            script.onerror = () => {
+                window.location.href = '/404.html';  // Redirect to 404 page if script fails to load
+                reject(new Error(`Failed to load script: ${path}`));
+            };
+
+            document.body.appendChild(script);
+        });
     }
 
     async function generateMenu() {
