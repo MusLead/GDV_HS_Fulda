@@ -6,97 +6,63 @@
     
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="http://localhost:3000/stylesheets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/src/bootstrap/css/bootstrap.min.css">
     
     <title>GDV</title>
-    <style>
-      #header {
-        text-align: center;
-      }
-
-      .container {
-        flex-grow: 1; 
-        display: flex;
-      }
-
-      ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      #menu {
-        background-color: #dddddd;
-        width: 200px;
-        padding: 20px;
-        padding-top: 50px;
-        flex-grow: 1;
-      }
-
-      #app {
-        flex-grow: 2;
-        padding: 20px;
-      }
-
-      .menuItem {
-        margin-bottom: 10px; /* Adds space between each menu item */
-      }
-
-      .menuItem:last-child {
-        margin-bottom: 0; /* Removes margin from the last item */
-      }
-
-      body {
-        font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-      }
-    </style>
 </head>
 <body>
-  <header id="header">
-    <h1>GDV</h1>
-  </header>
-  <div class="container">
-    <nav id="menu" class="navbar"> 
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
-        <li class="nav-item menuItem"><a class= "nav-link" href="?script=main"> Main Page</a></li>
-        <li class="menuItem"><a href="?script=Part_1/pgIntro">Intro</a></li>
-        <li class="menuItem"><a href="?script=Part_1/perspectiveDivide">Perspective Divide</a></li>
-        <li class="menuItem"><a href="?script=Part_1/rayEquation">Ray Equation</a></li>
-        <li class="menuItem"><a href="?script=Part_1/vector">Vector</a></li>
-        <li class="menuItem"><a href="?script=Part_1/walkToVec">Walk To Vec</a></li>
-        <li class="menuItem"><a href="?script=Part_1/basis">Basis</a></li>
-        <li class="menuItem"><a href="?script=Linear_Algebra/angle">Angle</a></li>
-        <li class="menuItem"><a href="?script=Linear_Algebra/matrixTransformation">Matrix Transformation</a></li>
-        <li class="menuItem"><a href="?script=Linear_Algebra/rotateMatrix">Rotate Matrix</a></li>
-        <li class="menuItem"><a href="?script=Linear_Algebra/shear">Shear</a></li>
-        <li class="menuItem"><a href="?script=Linear_Algebra/homogeneousPoint">Homogeneous Point</a></li>
-        <li class="menuItem"><a href="?script=Ray_Tracing/rayTracing1">Ray Tracing 1</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/framebuffer_trial">Framebuffer</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/animation_1">Animation 1</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/animation_linear">Animation linear</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/animation_pingpong">Pingpong</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/animation_RGB_pingpong">RGB Pingpong</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/easeOutBounce">Ease Out Bounce</a></li>
-        <li class="menuItem"><a href="?script=framebuffer/pingpongEase">Pingpong Ease</a></li>
-        <li class="menuItem"><a href="?script=Ray_Tracing/rayTracing2">Ray Tracing 2</a></li>
-        <li class="menuItem"><a href="?script=Ray_Tracing/cameraTranform">Camera Transform (unique)</a></li>
-        <li class="menuItem"><a href="?script=Ray_Tracing/cameraTransform">Camera Transform</a></li>
-        <li class="menuItem"><a href="?script=foo/foo">foo</a></li>
-      </ul>
-    </nav>
+
+  <nav class="navbar bg-body-tertiary fixed-top" >
+    <div class="container-fluid">
+      <header class="navbar-brand mx-auto d-inline-block" id="header"><h3>GDV</h3></header>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item"><a class= "nav-link" href="?script=main"> Main Page</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/pgIntro">Intro</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/perspectiveDivide">Perspective Divide</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/rayEquation">Ray Equation</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/vector">Vector</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/walkToVec">Walk To Vec</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Part_1/basis">Basis</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Linear_Algebra/angle">Angle</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Linear_Algebra/matrixTransformation">Matrix Transformation</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Linear_Algebra/rotateMatrix">Rotate Matrix</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Linear_Algebra/shear">Shear</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Linear_Algebra/homogeneousPoint">Homogeneous Point</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Ray_Tracing/rayTracing1">Ray Tracing 1</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/framebuffer_trial">Framebuffer</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/animation_1">Animation 1</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/animation_linear">Animation linear</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/animation_pingpong">Pingpong</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/animation_RGB_pingpong">RGB Pingpong</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/easeOutBounce">Ease Out Bounce</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=framebuffer/pingpongEase">Pingpong Ease</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Ray_Tracing/rayTracing2">Ray Tracing 2</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Ray_Tracing/cameraTranform">Camera Transform (unique)</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=Ray_Tracing/cameraTransform">Camera Transform</a></li>
+            <li class="nav-item"><a class= "nav-link" href="?script=foo/foo">foo</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid mt-5">
     <div id="app">
       <!-- DO NOT CHANGE THE ID! THIS IS THE ROOT ELEMENT FOR VITE TO MOUNT THE APP -->
     </div>
   </div>
+
   <script type="module" src="menuScript.ts"></script>
-  
-  <!-- Bootstrap JS and Popper.js -->
-  <script src="http://localhost:3000/js/popper.min.js"></script>
-  <script src="http://localhost:3000/js/bootstrap.min.js"></script>
+  <!-- Bootstrap JS  -->
+  <script src="/src/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

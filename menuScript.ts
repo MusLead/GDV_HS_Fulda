@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('#header h1');
+    const header = document.querySelector('#header h3');
     const queryParams = new URLSearchParams(window.location.search);
     const scriptName = queryParams.get('script') || "main";  // Default to 'main'
 
