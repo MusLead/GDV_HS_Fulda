@@ -1,5 +1,5 @@
 import Framebuffer, { Color3 } from "../../framebuffer";
-import { multVec3Matrix4 , rotZ, Vec3, Matrix4, Matrix3, rasterToScreen, multVec3Matrix4_transpose, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
+import { multVec3Matrix4 , Vec3, Matrix4, Matrix3, rasterToScreen, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
 
 const width = 600;
 const height = 600;

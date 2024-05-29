@@ -262,6 +262,15 @@ export function vecMultiplyScalar(scalar: number, v: Vec3): Vec3 {
     return v.map(value => value * scalar) as Vec3;
 }
 
+/**
+ * TODO: write the documentation!
+ * @param x 
+ * @param y 
+ * @param width 
+ * @param height 
+ * @param z usually the value is negative...
+ * @returns 
+ */
 export function rasterToNDC(x: number, y: number, width: number, height: number, z: number): Vec3 {
     return [
         (x + 0.5) / width,
@@ -286,6 +295,15 @@ export function ndcToScreenVec(vector: Vec3): Vec3 {
     ];
 }
 
+/**
+ * 
+ * @param x 
+ * @param y 
+ * @param width the width of the screen
+ * @param height the height of the screen
+ * @param z usually the value is negative
+ * @returns 
+ */
 export function rasterToScreen(x: number, y: number, width: number, height: number, z: number): Vec3 {
     return ndcToScreenVec(rasterToNDC(x, y, width, height, z));
 }

@@ -11,7 +11,7 @@ let currentFrame = 0
 // Step from 0 to 1
 for (let i = 0; i <= 1; i += 0.02) {
     framebuffer.clear()
-    let movedR = 0; //TODO: Optional if you have a time play with this
+    // let movedR = 0; //TODO: Optional if you have a time play with this
     // offsets (intial place wihtin the scope)
     const offsetR = ((i + 0)*2) % 1;
     const offsetG = ((i + 0.33)*4) % 1;

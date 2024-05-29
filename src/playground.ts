@@ -27,7 +27,7 @@ export default class Playground {
     private gridHelperXZ: THREE.GridHelper | null = null
     private gridHelperYZ: THREE.GridHelper | null = null
     private labelRenderer
-    private cubeInstance
+    // private cubeInstance
     private sphereInstance
 
     constructor(side = false) {
@@ -88,7 +88,7 @@ export default class Playground {
         this.labelRenderer.domElement.style.top = '0px';
         this.labelRenderer.domElement.style.pointerEvents = 'none';
 
-        this.cubeInstance = new THREE.BoxGeometry(1, 1, 1);
+        // this.cubeInstance = new THREE.BoxGeometry(1, 1, 1);
         this.sphereInstance = new THREE.SphereGeometry();
 
         if (this.container) {

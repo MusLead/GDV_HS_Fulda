@@ -55,7 +55,12 @@ for (let x = 0; x <= width; x++) {
 
         for (let i = 0; i < spheres.length; i++) {
 
-            const [t1, t2] = raySphereIntersect(vTransformed,oTransformed,spheres[i])// <--- Calculate intersections
+            const [t1, t2] = 
+            raySphereIntersect(
+                vTransformed as unknown as Vec3, 
+                oTransformed as unknown as Vec3,
+                spheres[i])// <--- Calculate intersections
+                
             if (t1 < closestIntersection && tNear < t1 && t1 < tFar) {
                 closestIntersection = t1;
                 closestSphere = spheres[i]

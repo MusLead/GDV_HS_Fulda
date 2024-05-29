@@ -18,7 +18,7 @@ for (let i = 0; i < width; i++) {
 // Draw a green pixel at the center
 // and change the coordinate raster space to screen space
 framebuffer.draw(x, y, [0, 255, 0]); 
-const vecScreen = ndcToScreenVec(rasterToNDC(x, y, width, height)).map(value => value.toFixed(2));
+const vecScreen = ndcToScreenVec(rasterToNDC(x, y, width, height, -1)).map(value => value.toFixed(2));
 framebuffer.log("Screen Space: " + vecScreen.toString());
 
 framebuffer.update();

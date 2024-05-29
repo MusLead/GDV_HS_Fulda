@@ -81,12 +81,14 @@ export default class Framebuffer {
     }
 
     
-    draw(x: number, y: number, color: Color3 = [80, 80, 80], parameters?: {}): void {
+    draw(x: number, y: number, color: Color3 = [80, 80, 80]
+        // , parameters?: {}
+    ): void {
 
-        const defaults = {
-        }
+        // const defaults = {
+        // }
 
-        const params = { ...defaults, ...parameters }
+        // const params = { ...defaults, ...parameters }
         this.color = color;
 
         if (!this.buffer) return;
