@@ -1,5 +1,5 @@
 import Framebuffer, { Color3 } from "../../framebuffer";
-import { Vec3, Matrix4, Matrix3, rasterToScreen, multVec3Matrix4_transpose, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
+import { Vec3, Matrix4, Matrix3, rasterToScreenSpace, multVec3Matrix4_transpose, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
 
 const width = 600;
 const height = 600;
@@ -49,7 +49,7 @@ for (let i = 0; i <= 1; i += 0.02) {
         for (let y = 0; y < height; y++) {
 
             // Convert raster coordinates to screen space
-            const v = rasterToScreen(x, y, width, height, imagePlaneDist);
+            const v = rasterToScreenSpace(x, y, width, height, imagePlaneDist);
 
             // Apply combined camera transformation
             //TODO: try to analyse how to rotate correctly with this approach!

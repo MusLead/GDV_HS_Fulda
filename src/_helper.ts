@@ -304,7 +304,7 @@ export function ndcToScreenVec(vector: Vec3): Vec3 {
  * @param z usually the value is negative
  * @returns 
  */
-export function rasterToScreen(x: number, y: number, width: number, height: number, z: number): Vec3 {
+export function rasterToScreenSpace(x: number, y: number, width: number, height: number, z: number): Vec3 {
     return ndcToScreenVec(rasterToNDC(x, y, width, height, z));
 }
 
@@ -344,7 +344,7 @@ export interface ISphere {
  * @returns 
  */
 export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, number] {
-    
+    // console.log(v, o, sphere)
     const co = o.map((o_val, i) => o_val - sphere.center[i])
     const ov = v.map((v_val, i) => v_val - o[i])
     
@@ -356,6 +356,6 @@ export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, 
     
     const t1 = (-b + Math.sqrt(discriminant)) / (2 * a)
     const t2 = (-b - Math.sqrt(discriminant)) / (2 * a)
-        
+    
     return [t1, t2]
 }

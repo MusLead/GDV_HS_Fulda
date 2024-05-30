@@ -2,8 +2,8 @@ import { ISphere, Matrix4, Vec3, matrix3ToMatrix4, matrix4Product, multVec3Matri
 import Framebuffer, { Color3 } from "../../framebuffer";
 import spheres from "../../bird.json" 
 
-const width = 200
-const height = 200
+const width = 400
+const height = 400
 const framebuffer = new Framebuffer(width, height);
 const imagePlaneDist = -1
 
@@ -30,10 +30,10 @@ const camInitialTransform = matrix4Product(camT, camRx);
 
 
 // Transform bird
-// const birdRotation = matrix3ToMatrix4(rotX(-90));
-// for (let i = 0; i < spheres.length; i++) {
-//     spheres[i].center = multVec3Matrix4(spheres[i].center as Vec3, birdRotation);
-// }
+const birdRotation = matrix3ToMatrix4(rotX(-90));
+for (let i = 0; i < spheres.length; i++) {
+    spheres[i].center = multVec3Matrix4(spheres[i].center as Vec3, birdRotation);
+}
 
 // Initialise a frame counter for the framebuffer.save() string
 let currentFrame = 0

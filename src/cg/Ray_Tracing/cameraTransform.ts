@@ -1,5 +1,5 @@
 import Framebuffer, { Color3 } from "../../framebuffer";
-import { multVec3Matrix4 , Vec3, Matrix4, Matrix3, rasterToScreen, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
+import { multVec3Matrix4 , Vec3, Matrix4, Matrix3, rasterToScreenSpace, matrix3ToMatrix4, matrix4Product, rotX, raySphereIntersect, ISphere, rotY } from '../../_helper';
 
 const width = 600;
 const height = 600;
@@ -49,7 +49,7 @@ for (let i = 0; i <= 1; i += 0.02) {
         for (let y = 0; y < height; y++) {
 
             // Convert raster coordinates to screen space
-            const v = rasterToScreen(x, y, width, height, imagePlaneDist);
+            const v = rasterToScreenSpace(x, y, width, height, imagePlaneDist);
 
             // Apply combined camera transformation
             
@@ -68,7 +68,7 @@ for (let i = 0; i <= 1; i += 0.02) {
                     raySphereIntersect(
                         vTransformed as unknown as Vec3, 
                         oTransformed as unknown as Vec3,
-                        spheres[i])// <--- Calculate intersections
+                        spheres[i]) // <--- Calculate intersections
 
                 if (t1 < closestIntersection && tNear < t1 && t1 < tFar) {
                     closestIntersection = t1;
