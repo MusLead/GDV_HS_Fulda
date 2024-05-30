@@ -26,14 +26,14 @@ export function perspDivide(p: Array<number>, dist: number): Array<number> {
 }
 
 /**
- * 
+ * (Aufgabe Part_1)
  * @param v point of the ray
  * @param o origin point
- * @param dist 
+ * @param t_dist 
  * @returns 
  */
-export function rayEquationCalc(v: Array<number>, o:Array<number>, dist: number): Array<number> {
-    return [(v[0] - o[0])*dist + o[0], (v[1] - o[1])*dist + o[1], (v[2] - o[2])*dist + o[2]];
+export function rayEquationCalc(v: Array<number>, o:Array<number>, t_dist: number): Array<number> {
+    return [(v[0] - o[0])*t_dist + o[0], (v[1] - o[1])*t_dist + o[1], (v[2] - o[2])*t_dist + o[2]];
 }
 
 /**
