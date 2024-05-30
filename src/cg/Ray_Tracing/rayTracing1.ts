@@ -1,3 +1,7 @@
+/**
+ * Project explanation: Vorlesung GDV 07.05.2024
+ * Project task: Ray tracing 1
+ */
 import Playground from "../../playground";
 import { vecMultiplyScalar, vecDotProduct, Vec3 } from "../../_helper";
 //TODO: check if evrythign is correct, because the formula might be complex to understand

@@ -1,3 +1,7 @@
+/**
+ * Project explanation: Vorlesung GDV 07.05.2024
+ * Project task: Ray tracing 2
+ */
 import { ISphere, Matrix4, Vec3, matrix3ToMatrix4, matrix4Product, multVec3Matrix4, rasterToScreenSpace, raySphereIntersect, rotX, rotY } from "../../_helper";
 import Framebuffer, { Color3 } from "../../framebuffer";
 import spheres from "../../bird.json" 

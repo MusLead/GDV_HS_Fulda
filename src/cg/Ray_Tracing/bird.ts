@@ -1,4 +1,8 @@
-/** 30.05.2024
+/**
+ * Project explanation: Vorlesung GDV 07.05.2024
+ * Project task: Ray tracing 2
+ *
+ * 30.05.2024
  * Problem: The camera and the bird were in the same position 
  * (in the origin). Therefore the came ra could not take the picture of the bird.
  * 

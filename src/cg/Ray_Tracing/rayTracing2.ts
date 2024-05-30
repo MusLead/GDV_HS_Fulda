@@ -1,3 +1,7 @@
+/**
+ * Project explanation: Vorlesung GDV 07.05.2024
+ * Project task: Ray tracing 2
+ */
 import Framebuffer, { Color3 } from "../../framebuffer";
 import { Vec3, ISphere, rasterToScreenSpace, raySphereIntersect } from '../../_helper'
 
