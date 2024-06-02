@@ -59,11 +59,11 @@ for (let x = 0; x <= width; x++) {
                 vTransformed as unknown as Vec3, 
                 oTransformed as unknown as Vec3,
                 spheres[i] as ISphere) // <--- Calculate intersections
-            // TODO: why is the t1, adn t2 NaN?
+            // TODO: why is the t1, and t2 NaN?
             // but the closestSphere is detected correctly?
             if (t1 < closestIntersection && tNear < t1 && t1 < tFar) {
                 closestIntersection = t1;
-                closestSphere = spheres[i]
+                closestSphere = spheres[i];
             }
 
             if (t2 < closestIntersection && tNear < t2 && t2 < tFar) {
