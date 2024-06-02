@@ -15,6 +15,16 @@ export type Matrix4 = [
     number, number, number, number
 ];
 
+export interface ISphere {
+    center: Vec3;
+    radius: number;
+    color: number[];
+}
+
+export interface ILight {
+    intensity: number;
+    position: Vec3;
+}
 /**
  * (Aufgabe Part_1)
  * @param p 
@@ -32,7 +42,7 @@ export function perspDivide(p: Array<number>, dist: number): Array<number> {
  * @param t_dist 
  * @returns 
  */
-export function rayEquationCalc(v: Array<number>, o:Array<number>, t_dist: number): Array<number> {
+export function rayEquationCalc(v: Array<number>, o:Array<number>, t_dist: number): Vec3 {
     return [(v[0] - o[0])*t_dist + o[0], (v[1] - o[1])*t_dist + o[1], (v[2] - o[2])*t_dist + o[2]];
 }
 
@@ -73,8 +83,8 @@ export function vecLength(v: Array<number>) {
  * @param v 
  * @returns 
  */
-export function vecNormalize(v: Array<number>){
-    return v.map((x) => vecLength(v) === 0 ? 1 : x/vecLength(v));
+export function vecNormalize(v: Vec3) : Vec3{
+    return v.map((x) => vecLength(v) === 0 ? 1 : x/vecLength(v)) as Vec3;
 }
 
 /**
@@ -214,7 +224,6 @@ export function multVec3Matrix4(v: Vec3, m: Matrix4): Vec4 {
         v4[0] * m[1] + v4[1] * m[5] + v4[2] * m[9] + v4[3] * m[13],
         v4[0] * m[2] + v4[1] * m[6] + v4[2] * m[10] + v4[3] * m[14],
         v4[0] * m[3] + v4[1] * m[7] + v4[2] * m[11] + v4[3] * m[15],
-
     ]
 }
 
@@ -329,22 +338,22 @@ export function easeOutBounce(x: number): number {
     }
 }
 
-export interface ISphere {
-    center: Vec3;
-    radius: number;
-    color: number[];
-}
-
-
 /**
+ * (Aufgabe Ray_Tracing2)
+ * This funciton calculate the intersection of a ray and a sphere
+ * if the discriminant is negative, there is no intersection 
+ * between the ray and the sphere
  * 
- * @param v 
- * @param o 
- * @param sphere 
- * @returns 
+ * For more intuitive and graphical explanation, please see rayTracing1.ts 
+ * For the basis of the formula, please see rayEquation.ts 
+ * 
+ * @param v point of the ray respected to the image plane
+ * @param o the origin point of the ray
+ * @param sphere the sphere object
+ * @returns two values of t, which are the intersection points
  */
 export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, number] {
-    // console.log(v, o, sphere)
+    
     const co = o.map((o_val, i) => o_val - sphere.center[i])
     const ov = v.map((v_val, i) => v_val - o[i])
     
@@ -358,4 +367,100 @@ export function raySphereIntersect(v: Vec3, o: Vec3, sphere: ISphere): [number, 
     const t2 = (-b - Math.sqrt(discriminant)) / (2 * a)
     
     return [t1, t2]
+}
+
+/**
+ * (Aufgabe Ray_Tracing2)
+ * @returns 
+ */
+export function lighting(surfPosition: Vec3, surfNormal: Vec3, lights: ILight[]
+    //parameters for surface position, normal and array of lights
+) {
+    let intensity = 0.0;
+
+    lights.forEach(light => {
+        const pLight = surfPosition.map((val, i) => light.position[i] - val)
+        const incidentVec = vecNormalize(pLight as Vec3) // <--- normalized vector from light to surface
+       
+        const dotP = vecDotProduct(surfNormal,incidentVec)// <--- dot product between surface normal and incident vector 
+
+        if (dotP > 0) {
+            intensity += light.intensity * dotP // <--- scale the lights intensity with the dot product
+        }
+    });
+
+    return intensity;
+}
+
+export function vecSubtract(a: Vec3, b: Vec3): Vec3 {
+    return a.map((val, i) => val - b[i]) as Vec3;
+}
+
+/**
+ * (Aufgabe Ray_Tracing3)
+ * @param vTransformed 
+ * @param oTransformed 
+ * @param tNear 
+ * @param tFar 
+ * @param spheres 
+ * @returns closestSphere and closestIntersection
+ */
+export function getClosestSphereAndIntersection(vTransformed: Vec3, oTransformed: Vec3, tNear: number = 1, tFar: number = 1000, spheres: ISphere[]) {
+    let closestSphere = null;
+    let closestIntersection = 9999;
+
+    for (let i = 0; i < spheres.length; i++) {
+
+        const [t1, t2] = raySphereIntersect(
+            vTransformed,
+            oTransformed,
+            spheres[i] as ISphere); // <--- Calculate intersections
+
+        if (t1 < closestIntersection && tNear < t1 && t1 < tFar) {
+            closestIntersection = t1;
+            closestSphere = spheres[i];
+        }
+
+        if (t2 < closestIntersection && tNear < t2 && t2 < tFar) {
+            closestIntersection = t2;
+            closestSphere = spheres[i];
+        }
+    }
+    return { closestSphere, closestIntersection };
+}
+
+/**
+ * (Aufgabe RayTracing3)
+ * @param surfPosition 
+ * @param surfNormal 
+ * @param lights 
+ * @param spheres all spheres represents objects and floor
+ * @returns the intensity of each position coordinate
+ */
+export function lightingWithShadows(surfPosition: Vec3, surfNormal: Vec3, lights: ILight[], spheres: ISphere[]) {
+    let intensity = 0.0;
+
+    lights.forEach(light => {
+        
+        const { closestSphere } = getClosestSphereAndIntersection(
+            light.position,
+            surfPosition,
+            0.01,
+            1,
+            spheres
+        );
+
+         // If in shadow, skip to next light
+        if (!closestSphere) {
+            const pLight = surfPosition.map((val, i) => light.position[i] - val)
+            const incidentVec = vecNormalize(pLight as Vec3) // <--- normalized vector from light to surface
+            const dotP = vecDotProduct(surfNormal,incidentVec)// <--- dot product between surface normal and incident vector 
+
+            if (dotP > 0) {
+                intensity += light.intensity * dotP // <--- scale the lights intensity with the dot product
+            }   
+        }
+    });
+
+    return intensity;
 }
