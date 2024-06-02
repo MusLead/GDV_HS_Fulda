@@ -44,7 +44,20 @@
         <h1>404</h1>
         <h2>Page Not Found</h2>
         <p>Sorry, the page you are looking for could not be found.</p>
+        <p id="failed-path"></p>
         <a href="/?script=src/cg/main">Go to Homepage</a>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const queryParams = new URLSearchParams(window.location.search);
+            const failedPath = queryParams.get('failedPath');
+            if (failedPath) {
+                const failedPathElement = document.getElementById('failed-path');
+                if (failedPathElement) {
+                    failedPathElement.textContent = `Failed to load script: ${failedPath}`;
+                }
+            }
+        });
+    </script>
 </body>
 </html>
