@@ -3,9 +3,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const queryParams = new URLSearchParams(window.location.search);
     const scriptPath = queryParams.get('script') || "/src/cg/main";  // Default to 'main'
 
+    const appId = "app"; // Assuming the app element has this ID
+
     updateHeader(scriptPath);
-    await loadScript(scriptPath);
-    await generateMenu();
+    try {
+        await loadScript(scriptPath);
+        await generateMenu();
+
+        // Check if the loaded script is empty
+        //FIXME: this is not working as expected. The coming soon screen is not displayed when the script is empty
+        const loadedScript = document.querySelector(`script[src="${scriptPath}.ts"]`);
+        if (loadedScript && loadedScript.textContent && loadedScript.textContent.trim() === "") {
+            createComingSoonScreen(appId);
+        }
+    } catch (error) {
+        console.error(error);
+        createComingSoonScreen(appId);
+    }
 
     // Function to format and update the header based on the script name
     function updateHeader(scriptName: string) {
@@ -28,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             script.onload = () => resolve();
             script.onerror = () => {
-                window.location.href = '/404.html';  // Redirect to 404 page if script fails to load
+                window.location.href = `/404.html?failedPath=${encodeURIComponent(path)}`;  // Pass the failed script path  Redirect to 404 page if script fails to load
                 reject(new Error(`Failed to load script: ${path}`));
             };
 
@@ -70,3 +84,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 });
+
+/**
+ * Creates a "coming soon" screen.
+ * @param appId The document id of the app.
+ */
+function createComingSoonScreen(appId: string): void {
+    const appElement = document.getElementById(appId);
+    if (appElement) {
+        appElement.innerHTML = "Coming Soon";
+        appElement.style.display = "flex";
+        appElement.style.justifyContent = "center";
+        appElement.style.alignItems = "center";
+        appElement.style.fontFamily = "Arial, sans-serif";
+        appElement.style.fontSize = "24px";
+        appElement.style.marginTop = "25%"; // Set margin-top to 50%
+    }
+}
