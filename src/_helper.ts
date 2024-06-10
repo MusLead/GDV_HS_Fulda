@@ -460,7 +460,61 @@ export function lightingWithShadows(surfPosition: Vec3, surfNormal: Vec3, lights
                 intensity += light.intensity * dotP // <--- scale the lights intensity with the dot product
             }   
         }
+
+    });
+
+
+    return intensity;
+}
+
+/**
+ * 
+ * @param surfPosition 
+ * @param surfNormal 
+ * @param lights 
+ * @param spheres 
+ * @param viewDirection 
+ * @param specExponent by default it is 1
+ * @returns 
+ */
+export function lightingWithShadowsSpec(surfPosition: Vec3, surfNormal: Vec3, lights: ILight[], spheres: ISphere[], viewDirection: Vec3, specExponent: number = 1) {
+    let intensity = 0.0;
+
+    lights.forEach(light => {
+        
+        const { closestSphere } = getClosestSphereAndIntersection(
+            light.position,
+            surfPosition,
+            0.01,
+            1,
+            spheres
+        );
+
+         // If in shadow, skip to next light
+        if (!closestSphere) {
+            const pLight = surfPosition.map((val, i) => light.position[i] - val)
+            const incidentVec = vecNormalize(pLight as Vec3) // <--- normalized vector from light to surface
+            const dotP = vecDotProduct(surfNormal,incidentVec)// <--- dot product between surface normal and incident vector 
+
+            if (dotP > 0) {
+                intensity += light.intensity * dotP // <--- scale the lights intensity with the dot product
+            }   
+
+            const reflected = vecReflect(incidentVec, surfNormal);
+
+            const minusNormViewDirection = vecNormalize(viewDirection.map(val => -val) as Vec3);
+            const vDotReflected = vecDotProduct(minusNormViewDirection, vecNormalize(reflected));
+
+            if (vDotReflected > 0) {
+                intensity +=
+                    light.intensity *
+                    Math.pow(vDotReflected, specExponent);
+            }
+        }
     });
 
     return intensity;
+}
+export function vecReflect(incident: Vec3, normal: Vec3):Vec3 {    
+    return incident.map((val, i) => val - 2 * normal[i] * vecDotProduct(incident, normal)) as Vec3;
 }
