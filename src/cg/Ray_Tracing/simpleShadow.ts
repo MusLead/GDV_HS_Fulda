@@ -7,22 +7,6 @@ import Framebuffer, { Color3 } from "../../framebuffer";
 import spheres from "../../bird.json" 
 
 // Lights
-// const lights : ILight[] = [
-//     {
-//         intensity: 1.3,
-//         position: [-5, 8, 20]
-//     },
-//      {
-//          intensity: 1.3,
-//          position: [15, 8, -20]
-//      },
-//      {
-//          intensity: .8,
-//          position: [15, 15, 20]
-//      },
-// ]
-
-// Lights
 const lights: ILight[] = [
     {
         intensity: 1.3,

@@ -16,14 +16,14 @@ const generateMenu = (dirPath: string, baseDir: string = '') => {
         name: item,
         type: 'folder',
         children: generateMenu(fullPath, baseDir),
-      });
+      } as never);
     } else {
       if (item.endsWith('.ts')) {
         menu.push({
           name: item.replace('.ts', ''),
           type: 'file',
           path: relativePath.replace(/\\/g, '/'),
-        });
+        } as never);
       }
     }
   });
