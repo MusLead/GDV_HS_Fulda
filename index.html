@@ -56,5 +56,8 @@
   <!-- Bootstrap JS and Popper.js -->
   <script src="/node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
   <script type="module" src="/src/bootstrap/js/bootstrap.min.js"></script>
+  <script>
+    document.documentElement.setAttribute('data-bs-theme', (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  </script>
 </body>
 </html>
