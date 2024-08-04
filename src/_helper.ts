@@ -1,3 +1,5 @@
+import Framebuffer from "./framebuffer";
+
 export type Vec3 = [number, number, number];
 
 export type Vec4 = [number, number, number, number];
@@ -25,6 +27,11 @@ export interface ILight {
     intensity: number;
     position: Vec3;
 }
+
+export function vecAdd(a: Vec3, b: Vec3): Vec3 {
+    return a.map((val, i) => val + b[i]) as Vec3;
+}
+
 /**
  * (Aufgabe Part_1)
  * @param p 
@@ -517,4 +524,548 @@ export function lightingWithShadowsSpec(surfPosition: Vec3, surfNormal: Vec3, li
 }
 export function vecReflect(incident: Vec3, normal: Vec3):Vec3 {    
     return incident.map((val, i) => val - 2 * normal[i] * vecDotProduct(incident, normal)) as Vec3;
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export type Matrix2 = [
+    number, number,
+    number, number,
+]
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix2Determinant(m: Matrix2) {
+    return m[0] * m[3] - m[1] * m[2]
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix3Determinant(m: Matrix3) {
+    const m1: Matrix2 = [
+        m[4], m[5],
+        m[7], m[8]
+    ]
+    const m2: Matrix2 = [
+        m[3], m[5],
+        m[6], m[8]
+    ]
+    const m3: Matrix2 = [
+        m[3], m[4],
+        m[6], m[7]
+    ]
+
+    return m[0] * matrix2Determinant(m1) - m[1] * matrix2Determinant(m2) + m[2] * matrix2Determinant(m3)
+
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix4Determinant(m: Matrix4) {
+    const m1: Matrix3 = [
+        m[5], m[6], m[7],
+        m[9], m[10], m[11],
+        m[13], m[14], m[15]
+    ]
+    const m2: Matrix3 = [
+        m[4], m[6], m[7],
+        m[8], m[10], m[11],
+        m[12], m[14], m[15]
+    ]
+    const m3: Matrix3 = [
+        m[4], m[5], m[7],
+        m[8], m[9], m[11],
+        m[12], m[13], m[15]
+    ]
+    const m4: Matrix3 = [
+        m[4], m[5], m[6],
+        m[8], m[9], m[10],
+        m[12], m[13], m[14]
+    ]
+
+    return m[0] * matrix3Determinant(m1) -
+        m[1] * matrix3Determinant(m2) +
+        m[2] * matrix3Determinant(m3) -
+        m[3] * matrix3Determinant(m4)
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix3Invert(m: Matrix3) {
+
+    // Create matrix of minors
+    const detM00 = matrix2Determinant([m[4], m[5], m[7], m[8]]);
+    const detM01 = matrix2Determinant([m[3], m[5], m[6], m[8]]);
+    const detM02 = matrix2Determinant([m[3], m[4], m[6], m[7]]);
+
+    const detM10 = matrix2Determinant([m[1], m[2], m[7], m[8]]);
+    const detM11 = matrix2Determinant([m[0], m[2], m[6], m[8]]);
+    const detM12 = matrix2Determinant([m[0], m[1], m[6], m[7]]);
+
+    const detM20 = matrix2Determinant([m[1], m[2], m[4], m[5]]);
+    const detM21 = matrix2Determinant([m[0], m[2], m[3], m[5]]);
+    const detM22 = matrix2Determinant([m[0], m[1], m[3], m[4]]);
+
+    // Cofactor matrix
+    // TODO: create a function of transpose instead writing mAdj manually
+    // const mCo = [
+    //     detM00, -detM01, detM02,
+    //     -detM10, detM11, -detM12,
+    //     detM20, -detM21, detM22
+    // ]
+
+    // Adjoint matrix (transpose of cofactor matrix)
+    const mAdj = [
+        detM00, -detM10, detM20,
+        -detM01, detM11, -detM21,
+        detM02, -detM12, detM22
+    ]
+
+    // divide by determinant of original matrix. We mulitply by the inverse
+    // so we only divide once:
+    const detInv = 1 / matrix3Determinant(m);
+    return [
+        mAdj[0] * detInv, mAdj[1] * detInv, mAdj[2] * detInv,
+        mAdj[3] * detInv, mAdj[4] * detInv, mAdj[5] * detInv,
+        mAdj[6] * detInv, mAdj[7] * detInv, mAdj[8] * detInv,
+    ]
+
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix4Invert(m: Matrix4):Matrix4 {
+    // Create matrix of minors
+    const detM00 = matrix3Determinant([
+        m[5], m[6], m[7],
+        m[9], m[10], m[11],
+        m[13], m[14], m[15]
+    ]);
+    const detM01 = matrix3Determinant([
+        m[4], m[6], m[7],
+        m[8], m[10], m[11],
+        m[12], m[14], m[15]
+    ])
+    const detM02 = matrix3Determinant([
+        m[4], m[5], m[7],
+        m[8], m[9], m[11],
+        m[12], m[13], m[15]
+    ])
+    const detM03 = matrix3Determinant([
+        m[4], m[5], m[6],
+        m[8], m[9], m[10],
+        m[12], m[13], m[14]
+    ])
+    // 
+    const detM10 = matrix3Determinant([
+        m[1], m[2], m[3],
+        m[9], m[10], m[11],
+        m[13], m[14], m[15]
+    ]);
+    const detM11 = matrix3Determinant([
+        m[0], m[2], m[3],
+        m[8], m[10], m[11],
+        m[12], m[14], m[15]
+    ]);
+    const detM12 = matrix3Determinant([
+        m[0], m[1], m[3],
+        m[8], m[9], m[11],
+        m[12], m[13], m[15]
+    ]);
+    const detM13 = matrix3Determinant([
+        m[0], m[1], m[2],
+        m[8], m[9], m[10],
+        m[12], m[13], m[14]
+    ])
+    //
+    const detM20 = matrix3Determinant([
+        m[1], m[2], m[3],
+        m[5], m[6], m[7],
+        m[13], m[14], m[15]
+    ]);
+    const detM21 = matrix3Determinant([
+        m[0], m[2], m[3],
+        m[4], m[6], m[7],
+        m[12], m[14], m[15]
+    ]);
+    const detM22 = matrix3Determinant([
+        m[0], m[1], m[3],
+        m[4], m[5], m[7],
+        m[12], m[13], m[15]
+    ]);
+    const detM23 = matrix3Determinant([
+        m[0], m[1], m[2],
+        m[4], m[5], m[6],
+        m[12], m[13], m[14]
+    ]);
+    //
+    const detM30 = matrix3Determinant([
+        m[1], m[2], m[3],
+        m[5], m[6], m[7],
+        m[9], m[10], m[11]
+    ]);
+    const detM31 = matrix3Determinant([
+        m[0], m[2], m[3],
+        m[4], m[6], m[7],
+        m[8], m[10], m[11]
+    ]);
+    const detM32 = matrix3Determinant([
+        m[0], m[1], m[3],
+        m[4], m[5], m[7],
+        m[8], m[9], m[11]
+    ]);
+    const detM33 = matrix3Determinant([
+        m[0], m[1], m[2],
+        m[4], m[5], m[6],
+        m[8], m[9], m[10]
+    ]);
+
+    // Cofactor matrix
+    // TODO: create a function of transpose instead writing mAdj manually
+    // const mCo = [
+    //     detM00, -detM01, detM02, -detM03,
+    //     -detM10, detM11, -detM12, detM13,
+    //     detM20, -detM21, detM22, -detM23,
+    //     -detM30, detM31, -detM32, detM33,
+
+    // ]
+    // Adjoint matrix
+    const mAdj = [
+        detM00, -detM10, detM20, -detM30,
+        -detM01, detM11, -detM21, detM31,
+        detM02, -detM12, detM22, -detM32,
+        -detM03, detM13, -detM23, detM33,
+
+    ]
+
+    // divide by determinant of original matrix. We mulitply by the inverse
+    // so we only divide once:
+    const detInv = 1 / matrix4Determinant(m);
+    return [
+        mAdj[0] * detInv, mAdj[1] * detInv, mAdj[2] * detInv, mAdj[3] * detInv,
+        mAdj[4] * detInv, mAdj[5] * detInv, mAdj[6] * detInv, mAdj[7] * detInv,
+        mAdj[8] * detInv, mAdj[9] * detInv, mAdj[10] * detInv, mAdj[11] * detInv,
+        mAdj[12] * detInv, mAdj[13] * detInv, mAdj[14] * detInv, mAdj[15] * detInv,
+
+    ]
+}
+
+/**
+ * (Aufgabe Linear_Algebra 3)
+ */
+export function matrix4Transpose(m: Matrix4): Matrix4 {
+    return [
+        m[0], m[4], m[8], m[12],
+        m[1], m[5], m[9], m[13],
+        m[2], m[6], m[10], m[14],
+        m[3], m[7], m[11], m[15],
+    ]
+
+}
+
+/**
+ * (Aufgabe Raseterization 1)
+ * @param v 
+ * @param width 
+ * @param height 
+ * @returns 
+ */
+export function screenToRasterspace(v: Vec3, width: number, height: number) {
+    // to NDC
+    const ndcX = (v[0] + 1) / 2
+    const ndcY = (1 - v[1]) / 2
+
+    // to raster
+    const rasterX = ndcX * width;
+    const rasterY = ndcY * height;
+    return [Math.round(rasterX), Math.round(rasterY)]
+
+}
+
+/**
+ * (Aufgabe Raseterization 1)
+ * this is ray equation approach to draw a line
+ * @param start 
+ * @param end 
+ * @param fb 
+ */
+export function drawLine(start: Array<number>, end: Array<number>, fb: Framebuffer) {
+    let startX = start[0]
+    let startY = start[1]
+    let endX = end[0]
+    let endY = end[1]
+    let steep = false;
+
+
+    if (Math.abs(endX - startX) < Math.abs(endY - startY)) {
+        // is steep -> switch x and y
+        [startX, startY] = [startY, startX];
+        [endX, endY] = [endY, endX]
+        steep = true;
+    }
+
+    if (startX > endX) {
+        [startX, endX] = [endX, startX];
+        [startY, endY] = [endY, startY];
+    }
+
+    for (let x = startX; x <= endX; x++) {
+        const t = (x - startX) / (endX - startX)
+        const y = (endY - startY) * t + startY;
+
+        if (steep) {
+            //console.info("Is steep")
+            fb.draw(Math.round(y), Math.round(x), [0, 200, 0])
+        } else {
+            //console.info("Is flat")
+            fb.draw(Math.round(x), Math.round(y), [200, 0, 0])
+        }
+    }
+}
+
+/**
+ * (Aufgabe Rasterization 1)
+ * @param start 
+ * @param end 
+ * @param fb 
+ */
+export function drawLineBresenham(start: Array<number>, end: Array<number>, fb: Framebuffer) {
+
+    let startX = start[0]
+    let startY = start[1]
+    let endX = end[0]
+    let endY = end[1]
+    let steep = false;
+
+    if (Math.abs(endX - startX ) < Math.abs(endY - startY )) {
+        [startX, startY] = [startY, startX];
+        [endX, endY] = [endY, endX];
+        steep = true;
+    }
+
+    if (startX > endX) {
+        [startX, endX] = [endX, startX];
+        [startY, endY] = [endY, startY];
+    }
+
+    const dX = Math.abs(endX - startX);
+    const dY = Math.abs(endY - startY);
+
+    let error = dX * 0.5; 
+    let y = startY;
+
+    for (let x = startX; x <= endX; x++) {
+        error -= dY
+        
+        if (error < 0) {
+            // Increment Y depending on slope
+            y += endY > startY ? 1 : -1;
+            // reset error
+            error += dX;
+        }
+
+        if (steep) {
+            fb.draw(y, x, [0, 200, 0])
+        } else {
+            fb.draw(x, y, [200, 0, 0])
+        }
+    }
+}
+
+/**
+ * Aufgabe Rasterization 1
+ * @param origin 
+ * @param x 
+ * @param y 
+ * @returns 
+ */
+export function determinantFromPoints(origin: number[], x: number[], y: number[]) {
+    const m = [
+        x[0] - origin[0], x[1] - origin[1],
+        y[0] - origin[0], y[1] - origin[1]
+    ]
+
+    return matrix2Determinant(m as Matrix2)
+}
+
+export function bbox(faceVertices: number[][], width: number, height: number, fb: Framebuffer, show = false) {
+    const bboxmin = [width, height]
+    const bboxmax = [0, 0]
+
+    for (let v of faceVertices) {
+        bboxmin[0] = Math.min(bboxmin[0], v[0]);
+        bboxmin[1] = Math.min(bboxmin[1], v[1]);
+        bboxmax[0] = Math.max(bboxmax[0], v[0]);
+        bboxmax[1] = Math.max(bboxmax[1], v[1]);
+
+    }
+
+    if (show) {
+
+        drawLineBresenham(bboxmin, [bboxmax[0], bboxmin[1]], fb)
+        drawLineBresenham(bboxmin, [bboxmin[0], bboxmax[1]], fb)
+        drawLineBresenham(bboxmax, [bboxmin[0], bboxmax[1]], fb)
+        drawLineBresenham(bboxmax, [bboxmax[0], bboxmin[1]], fb)
+    }
+
+    return [bboxmin, bboxmax]
+}
+
+/**
+ * (Aufgabe Rasterization 2)
+ * 04.08.2024 =  Rendering took 4637.000000000001 milliseconds for a frame
+ * @param faceVertices 
+ * @param dot 
+ * @param width 
+ * @param height 
+ * @param fb 
+ */
+export function fillTriangle(faceVertices: number[][], dot: number, width: number, height: number, fb: Framebuffer) {
+
+    const a = faceVertices[0];
+    const b = faceVertices[1];
+    const c = faceVertices[2];
+
+    // const face = determinantFromPoints(a, c, b);
+    // const faceArea = 1 / (face * 0.5)
+
+    for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+            const p = [x, y]
+            
+            // let inside = true;
+            const apb = determinantFromPoints(a, p, b)
+            const bpc = determinantFromPoints(b, p, c)
+            const cpa = determinantFromPoints(c, p, a)
+
+            if (apb >= 0 && bpc >= 0 && cpa >= 0) {
+                //console.info(apb)
+                // const w3 = (apb * 0.5) * faceArea
+                // const w1 = (bpc * 0.5) * faceArea
+                // const w2 = 1 - w3 - w1
+
+                if (dot <= 0) {
+                    fb.draw(p[0], p[1], [0, 0, 0])
+                } else {
+                    fb.draw(p[0], p[1], [dot * 180, dot * 180, dot * 180])
+                }
+            }
+        }
+    }
+}
+
+/**
+ * (Aufgabe Rasterization 2)
+ * using bounding box concept to optimize the rendering time of fillTriangle function
+ * 04.08.2024 = Rendering took 29 milliseconds for a frame.
+ * @param faceVertices 
+ * @param dot 
+ * @param width 
+ * @param height 
+ * @param fb 
+ */
+export function fillTriangleOptimized(faceVertices: number[][], dot: number, width: number, height: number, fb: Framebuffer, showBox = false) {
+
+    const [bboxmin, bboxmax] = bbox(faceVertices, width, height, fb, showBox);
+
+    const a = faceVertices[0];
+    const b = faceVertices[1];
+    const c = faceVertices[2];
+
+    // const face = determinantFromPoints(a, c, b);
+    // const faceArea = 1 / (face * 0.5)
+
+    for (let x = bboxmin[0]; x < bboxmax[0]; x++) {
+       for (let y = bboxmin[1]; y < bboxmax[1]; y++) {
+            const p = [x, y]
+            // let inside = true;
+            const apb = determinantFromPoints(a, p, b)
+            const bpc = determinantFromPoints(b, p, c)
+            const cpa = determinantFromPoints(c, p, a)
+
+            if (apb >= 0 && bpc >= 0 && cpa >= 0) {
+                // console.info(apb)
+                // const w3 = (apb * 0.5) * faceArea
+                // const w1 = (bpc * 0.5) * faceArea
+                // const w2 = 1 - w3 - w1
+
+                if (dot <= 0) {
+                    fb.draw(p[0], p[1], [0, 0, 0])
+                } else {
+                    fb.draw(p[0], p[1], [dot * 180, dot * 180, dot * 180])
+                }
+            }
+        }
+    }
+}
+
+/**
+ * (Aufgabe Rasterization 2)
+ * @param vertices2D 
+ * @param vertices3D 
+ * @param dot 
+ * @param depthBuffer 
+ * @param width 
+ * @param height 
+ * @param fb 
+ */
+export function fillTriangleDepthBuffer(vertices2D: number[][], vertices3D: number[][], dot: number, depthBuffer: number[], width: number, height: number, fb: Framebuffer) {
+
+    const [bboxmin, bboxmax] = bbox(vertices2D, width, height,fb, false);
+
+    // Verteces2D is an array of triangle vertices in 2D space
+    const a = vertices2D[0]; // point A
+    const b = vertices2D[1]; // point B
+    const c = vertices2D[2]; // point C
+
+    // we take the absolute value of the z-coordinate of the vertices to ensure non-negative values
+    const aZ = Math.abs(vertices3D[0][2]);
+    const bZ = Math.abs(vertices3D[1][2]);
+    const cZ = Math.abs(vertices3D[2][2]);
+
+    const face = determinantFromPoints(a, c, b);
+    const faceArea = 1 / (face * 0.5)
+
+    for (let x = bboxmin[0]; x < bboxmax[0]; x++) {
+        for (let y = bboxmin[1]; y < bboxmax[1]; y++) {
+            const p = [x, y]
+            // let inside = true;
+            const apb = determinantFromPoints(a, p, b)
+            const bpc = determinantFromPoints(b, p, c)
+            const cpa = determinantFromPoints(c, p, a)
+
+            if (apb >= 0 && bpc >= 0 && cpa >= 0) {
+
+                // barycentric coordinates (weights)
+                const w3 = (apb * 0.5) * faceArea;
+                const w1 = (bpc * 0.5) * faceArea;
+                const w2 = 1 - w3 - w1;
+
+                const zInterp = aZ * w1 + bZ * w2 + cZ * w3;
+                const depthBufferIndex = x + width * y; // locate the pixel in the depth buffer
+
+                // the deptBuffer might be called again in the future for other faces.
+                // we want to make sure that the triangle does not overlap with other triangles
+                // so we check if the z value of the current pixel is greater than the interpolated z value
+                // if so, update the depth buffer and draw the pixel
+                const currentZ = depthBuffer[depthBufferIndex];
+                if (currentZ > zInterp) {
+                    depthBuffer[depthBufferIndex] = zInterp;
+                    if (dot <= 0) {
+                        fb.draw(p[0], p[1], [0, 0, 0])
+                    } else {
+                        fb.draw(p[0], p[1], [dot * 180, dot * 180, dot * 180])
+                    }
+                    // Visualize depth buffer:
+                    // fb.draw(p[0], p[1], [zInterp * 120, zInterp * 120, zInterp * 120])
+                } 
+            }
+        }
+    }
 }
