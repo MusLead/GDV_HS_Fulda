@@ -49,6 +49,6 @@ const myPlugin = () => {
 };
 
 export default defineConfig({
-  base: '/GDV_1515659/',
+  // base: '/GDV_1515659/',
   plugins: [myPlugin()],
 });
